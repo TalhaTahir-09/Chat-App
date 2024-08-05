@@ -1,30 +1,64 @@
 import { fontWeight } from "../index.js";
+import { signOut } from "firebase/auth";
+import { auth } from '../firebase-config.js'
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
 
 function SignIn() {
+  const notify = () =>
+  toast('👋 Welcome to TCA!', {
+    position: "top-right",
+    autoClose: 4999,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: 0,
+    theme: "dark",
+    });
+  const handleSignOut = async () => {
+    try {
+      signOut(auth);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  useEffect(() => {
+    notify();
+  }, [])
   return (
-    <div className="flex-center width-100 height-100">
-      <div className="flex-column-center sign-in-container border-radius-20px">
-        <div className="signIn-text mb-1 flex-column-center">
-          <h3 className="h-1" style={fontWeight(500)}>
+    <>
+    <div className="flex items-center justify-center w-full h-full">
+      <div className="flex flex-col justify-center items-center sign-in-container rounded-2xl border-radius-20px">
+        <div className="signIn-text mb-4 flex flex-col justify-center items-center">
+          <h3 className="heading-1" style={fontWeight(500)}>
             Welcome to TCA! 👋
           </h3>
-          <p style={fontWeight(400)} className="mt-1 mb-1">
-            Please Sign up 
+          <p style={fontWeight(400)} className="mt-4 mb-4">
+            Please Sign up
           </p>
         </div>
-        <div className="signInButton-container width-100">
-        </div>
-        <div className="signInButton-container width-100">
+        <div className="signInButton-container w-full"></div>
           <a
             href="/sign-in"
-            className="mt-1 bg-cyan color-white flex-center width-100 sign-in-btn"
+            className="mt-4 bg-cyan text-white flex justify-center items-center w-full sign-in-btn"
             style={fontWeight(500)}
           >
             Sign In
           </a>
-        </div>
+          <button
+            className="mt-4 w-full bg-cyan text-white flex items-center justify-center sign-in-btn"
+            style={fontWeight(500)}
+            onClick={handleSignOut}
+          >
+            Sign Out
+          </button>
       </div>
     </div>
+    <ToastContainer />
+
+    </>
   );
 }
 export default SignIn;

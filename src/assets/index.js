@@ -10,12 +10,12 @@ export function fontWeight(weight) {
 export function passwordShower(showerId, passwordId){
     let shower = document.getElementById(showerId)
     let passwordInput = document.getElementById(passwordId)
-    if(shower.className === 'bx  bx-hide h-4'){
-        shower.className = 'bx  bx-show h-4'
+    if(shower.className === 'bx  bx-hide heading-4'){
+        shower.className = 'bx  bx-show heading-4'
     }else{
-        shower.className = 'bx  bx-hide h-4'
+        shower.className = 'bx  bx-hide heading-4'
     }
-    if(shower.className === 'bx  bx-show h-4'){
+    if(shower.className === 'bx  bx-show heading-4'){
        passwordInput.type = 'text';
     }else{
        passwordInput.type = 'password';
