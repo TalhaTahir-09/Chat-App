@@ -102,3 +102,6 @@ html {
   font-weight: 600;
   color: rgb(245, 226, 200);
 }
+.chat-messages-container{
+  height: 80vh;
+}

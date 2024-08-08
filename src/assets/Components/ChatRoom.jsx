@@ -28,7 +28,7 @@ export default function ChatRoom() {
       theme: "dark",
     });
   // State
-
+  const containerRef = useRef(null);
   const [commentList, setCommentList] = useState([]);
   const [username, setUsername] = useState("");
   const [userImg, setUserImg] = useState("");
@@ -45,6 +45,7 @@ export default function ChatRoom() {
       }));
       setCommentList(comments);
     });
+
     return () => unsubscribe()
   }, []);
 
@@ -89,11 +90,16 @@ export default function ChatRoom() {
     notify();
   }, []);
 
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+  }, [commentList]);
   return (
     <>
       <div className="bg-chat w-full h-full pt-16 pr-24 pl-24 pb-12">
-        <div className="chat-input-container flex flex-col relative w-full h-full">
-          <div className="chat-messages-container gap-3 pb-24 scroll-p-8 flex flex-col h-full">
+        <div className="chat-input-container flex flex-col relative w-full">
+          <div className="chat-messages-container  mb-24 gap-3 flex flex-col" ref={containerRef}>
             {commentList.map((user) => {
               return (
                 <div
