@@ -46,7 +46,7 @@ export default function ChatRoom() {
       setCommentList(comments);
     });
 
-    return () => unsubscribe()
+    return () => unsubscribe();
   }, []);
 
   // Fn
@@ -58,7 +58,7 @@ export default function ChatRoom() {
     if (event.key === "Enter") {
       event.preventDefault();
       handleSend();
-    setInputComment("");
+      setInputComment("");
     }
   };
 
@@ -97,14 +97,17 @@ export default function ChatRoom() {
   }, [commentList]);
   return (
     <>
-      <div className="bg-chat w-full h-full pt-16 pr-24 pl-24 pb-12">
-        <div className="chat-input-container flex flex-col relative w-full">
-          <div className="chat-messages-container  mb-24 gap-3 flex flex-col" ref={containerRef}>
+      <div className="bg-chat h-full w-full px-6 py-10 lg:p-20 2xl:px-60">
+        <div className="chat-input-container relative flex h-full w-full flex-col">
+          <div
+            className="chat-messages-container flex flex-col gap-3 pb-16 sm:mb-24"
+            ref={containerRef}
+          >
             {commentList.map((user) => {
               return (
                 <div
                   key={user.time}
-                  className="flex justify-center items-center chat-message-container gap-4 p-4 pr-4"
+                  className="chat-message-container flex items-center justify-center gap-4 p-4 pr-4"
                 >
                   <div className="user-img-cont">
                     <img src={user.userImg} className="user-img" />
@@ -116,7 +119,7 @@ export default function ChatRoom() {
                     >
                       {user.username}
                     </span>
-                    <div className="flex comment-date-holder">
+                    <div className="comment-date-holder flex">
                       <div
                         className="user-comment text-white"
                         style={fontWeight(500)}
@@ -124,7 +127,7 @@ export default function ChatRoom() {
                         {user.comment}
                       </div>
                       <div
-                        className="text-white comment-date"
+                        className="comment-date text-white"
                         style={fontWeight(500)}
                       >
                         {dateFormat.format(user.time)}
@@ -135,8 +138,8 @@ export default function ChatRoom() {
               );
             })}
           </div>
-          <div className="input-container w-full left-0 bg-chat pt-2 absolute flex justify-center items-center">
-            <div className="relative grow">
+          <div className="input-container bg-chat absolute left-0 flex w-full flex-col items-center justify-center pt-2 sm:flex-row">
+            <div className="relative w-full grow">
               <input
                 onChange={(e) => {
                   setInputComment(e.target.value);
@@ -144,14 +147,11 @@ export default function ChatRoom() {
                 value={inputComment}
                 onKeyDown={handleEnter}
                 type="text"
-                className="Text-sender-input focus:border-purple-400 border-white text-base focus:border-solid focus:border-2  border-2 border-solid p-4 pl-12 rounded-2xl w-full"
+                className="Text-sender-input w-full rounded-2xl border-2 border-solid border-white px-4 text-base focus:border-2 focus:border-solid focus:border-purple-400 sm:p-4 sm:pl-12"
                 placeholder="Send a message....."
                 style={fontWeight(500)}
               />
-              <div
-                className="sender-container flex justify-center items-center absolute left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4"
-                style={{ left: `95%` }}
-              >
+              <div className="sender-container absolute right-0 top-2/4 flex -translate-x-2/4 -translate-y-2/4 items-center justify-center">
                 <button
                   className="bx bxs-arrow-to-top input-sender"
                   onClick={handleSend}
@@ -159,7 +159,7 @@ export default function ChatRoom() {
               </div>
             </div>
             <button
-              className="bg-cyan text-white flex justify-center items-center sign-in-btn chat-sign-in"
+              className="bg-cyan sign-in-btn chat-sign-in flex w-full items-center justify-center text-white sm:w-1/5"
               style={fontWeight(500)}
               onClick={handleSignOut}
             >
