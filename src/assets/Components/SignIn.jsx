@@ -32,7 +32,7 @@ function SignIn(authState) {
   return (
     <>
       <div className="flex h-full w-full items-center justify-center">
-        <div className="sign-in-container flex w-5/6 flex-col items-center justify-center rounded-2xl md:w-2/5 lg:w-3/12">
+        <div className="sign-in-container flex w-5/6 flex-col items-center justify-center rounded-2xl p-8 md:w-2/5 lg:w-3/12">
           <div className="signIn-text mb-12">
             <h3 className="heading-1" style={fontWeight(500)}>
               Sign In

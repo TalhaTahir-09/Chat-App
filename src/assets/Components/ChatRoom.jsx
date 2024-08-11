@@ -97,7 +97,7 @@ export default function ChatRoom() {
   }, [commentList]);
   return (
     <>
-      <div className="bg-chat h-full w-full px-6 py-10 lg:p-20 2xl:px-60">
+      <div className="bg-chat h-full w-full px-6 pb-5 pt-5 lg:p-20 lg:py-10 2xl:px-60">
         <div className="chat-input-container relative flex h-full w-full flex-col">
           <div
             className="chat-messages-container flex flex-col gap-3 pb-16 sm:mb-24"
@@ -107,10 +107,10 @@ export default function ChatRoom() {
               return (
                 <div
                   key={user.time}
-                  className="chat-message-container flex items-center justify-center gap-4 p-4 pr-4"
+                  className="chat-message-container flex items-center justify-center gap-2 p-2 sm:p-4 sm:pr-4 lg:gap-4"
                 >
-                  <div className="user-img-cont">
-                    <img src={user.userImg} className="user-img" />
+                  <div className="user-img-cont ml-2 w-5 lg:ml-0 lg:w-7">
+                    <img src={user.userImg} className="user-img w-5 lg:w-7" />
                   </div>
                   <div className="user-comment-container flex flex-col">
                     <span
@@ -121,13 +121,13 @@ export default function ChatRoom() {
                     </span>
                     <div className="comment-date-holder flex">
                       <div
-                        className="user-comment text-white"
+                        className="user-comment text-sm text-white lg:text-base"
                         style={fontWeight(500)}
                       >
                         {user.comment}
                       </div>
                       <div
-                        className="comment-date text-white"
+                        className="comment-date mr-2 text-gray-400 lg:mr-0"
                         style={fontWeight(500)}
                       >
                         {dateFormat.format(user.time)}
@@ -138,7 +138,7 @@ export default function ChatRoom() {
               );
             })}
           </div>
-          <div className="input-container bg-chat absolute left-0 flex w-full flex-col items-center justify-center pt-2 sm:flex-row">
+          <div className="input-container bg-chat absolute left-0 flex w-full flex-col items-center justify-center gap-2 pt-2 sm:flex-row lg:bottom-12 lg:gap-6">
             <div className="relative w-full grow">
               <input
                 onChange={(e) => {
@@ -159,7 +159,7 @@ export default function ChatRoom() {
               </div>
             </div>
             <button
-              className="bg-cyan sign-in-btn chat-sign-in flex w-full items-center justify-center text-white sm:w-1/5"
+              className="sign-in-btn chat-sign-in flex w-full items-center justify-center bg-cyan-700 text-white sm:w-1/5"
               style={fontWeight(500)}
               onClick={handleSignOut}
             >
@@ -168,7 +168,7 @@ export default function ChatRoom() {
           </div>
         </div>
       </div>
-      {/* <ToastContainer /> */}
+      <ToastContainer />
     </>
   );
 }

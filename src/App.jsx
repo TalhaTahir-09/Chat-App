@@ -11,10 +11,7 @@ function App() {
   const [authState, setAuthState] = useState(auth);
   useEffect(() => {
     auth.onAuthStateChanged(function (user) {
-      if (
-        user &&
-        window.location.href !== "https://chatapptalha.vercel.app/chat-room"
-      ) {
+      if (user && window.location.href !== "http://localhost:5173/chat-room") {
         console.log("Ran");
         window.location.replace("/chat-room");
       }

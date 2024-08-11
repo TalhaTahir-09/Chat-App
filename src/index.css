@@ -3,35 +3,145 @@
 @tailwind components;
 @tailwind utilities;
 
-
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: sans-serif ;
+  font-family: sans-serif;
 }
-/* Reset */
-main{display:block;}body{margin:0;}p{margin:0;}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit;margin:0;}ul,ol{margin:0;padding:0;list-style:none;}a{background-color:transparent;text-decoration:none;color:inherit;}svg,img{vertical-align:bottom;}button{-webkit-appearance:none;appearance:none;vertical-align:middle;color:inherit;font:inherit;background:transparent;padding:0;margin:0;border-radius:0;text-align:inherit;text-transform:inherit;}button,[type="button"],[type="reset"],[type="submit"]{cursor:pointer; border: none;}label[for]{cursor:pointer;}input{outline: none;border: none;}
 
 /* Font Size */
-.heading-1{font-size:40px;line-height:1.5;}
-.heading-2{font-size:36px;line-height:1.375;}
-.heading-3{font-size:31px;line-height:1.25;}
-.heading-4{font-size:25px;line-height:1;}
-.para-1{font-size:18px;line-height:1.5;}
-.para-2{font-size:16px;line-height:1.5;}
-.para-3{font-size:14px;line-height:1.5;}
-.para-4{font-size:14px;line-height:1;}
-.color-cyan{
-  color: #54B2C2;
+.heading-1 {
+  font-size: 40px;
+  line-height: 1.5;
 }
-.color-white{
-  color: white ;
+.heading-2 {
+  font-size: 36px;
+  line-height: 1.375;
 }
-.bg-cyan{
-  background-color: #54B2C2;
+.heading-3 {
+  font-size: 31px;
+  line-height: 1.25;
 }
-.bg-white{
+.heading-4 {
+  font-size: 25px;
+  line-height: 1;
+}
+.para-1 {
+  font-size: 18px;
+  line-height: 1.5;
+}
+.para-2 {
+  font-size: 16px;
+  line-height: 1.5;
+}
+.para-3 {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.para-4 {
+  font-size: 14px;
+  line-height: 1;
+}
+.color-cyan {
+  color: #54b2c2;
+}
+.color-white {
+  color: white;
+}
+.bg-cyan {
+  background-color: #54b2c2;
+}
+.bg-white {
   background-color: white;
 }
+::-webkit-scrollbar {
+  width: 8px;
+}
 
+::-webkit-scrollbar-track {
+  background: #2a2b2b;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #38cefc;
+  border-radius: 10px;
+}
+
+/* Reset */
+main {
+  display: block;
+}
+body {
+  margin: 0;
+}
+p {
+  margin: 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
+}
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+a {
+  background-color: transparent;
+  text-decoration: none;
+  color: inherit;
+}
+svg,
+img {
+  vertical-align: bottom;
+}
+button {
+  -webkit-appearance: none;
+  appearance: none;
+  vertical-align: middle;
+  color: inherit;
+  font: inherit;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  text-align: inherit;
+  text-transform: inherit;
+}
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  cursor: pointer;
+  border: none;
+}
+label[for] {
+  cursor: pointer;
+}
+input {
+  outline: none;
+  border: none;
+}
+.chat-message-container {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
