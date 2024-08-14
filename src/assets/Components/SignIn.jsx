@@ -32,8 +32,8 @@ function SignIn(authState) {
   return (
     <>
       <div className="flex h-full w-full items-center justify-center">
-        <div className="sign-in-container flex w-5/6 flex-col items-center justify-center rounded-2xl p-8 md:w-2/5 lg:w-3/12">
-          <div className="signIn-text mb-12">
+        <div className="sign-in-container flex w-5/6 flex-col items-center justify-center rounded-2xl p-4 md:w-2/5 lg:w-3/12 lg:p-8">
+          <div className="signIn-text mb-2 lg:mb-12">
             <h3 className="heading-1" style={fontWeight(500)}>
               Sign In
             </h3>
@@ -48,7 +48,7 @@ function SignIn(authState) {
               value={email}
               type="email"
               id="email-input"
-              className="input mb-4 mt-4 w-full rounded-2xl border border-solid border-gray-300 p-4"
+              className="input mb-2 mt-2 w-full rounded-2xl border border-solid border-gray-300 p-4 lg:mb-4 lg:mt-4 lg:p-4"
               placeholder="example@gmail.com"
             />
             <label htmlFor="password-input">
@@ -58,7 +58,7 @@ function SignIn(authState) {
               <input
                 id="password-input"
                 type="password"
-                className="input mb-4 mt-4 w-full rounded-2xl border border-solid border-gray-300 p-4"
+                className="nput mb-2 mt-2 w-full rounded-2xl border border-solid border-gray-300 p-4 lg:mb-4 lg:mt-4 lg:p-4"
                 placeholder="**********"
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}

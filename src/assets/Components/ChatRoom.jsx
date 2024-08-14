@@ -110,24 +110,31 @@ export default function ChatRoom() {
                   className="chat-message-container flex items-center justify-center gap-2 p-2 sm:p-4 sm:pr-4 lg:gap-4"
                 >
                   <div className="user-img-cont ml-2 w-5 lg:ml-0 lg:w-7">
-                    <img src={user.userImg} className="user-img w-5 lg:w-7" />
+                    <img
+                      src={
+                        user.userImg
+                          ? user.userImg
+                          : "https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg"
+                      }
+                      className="user-img w-5 lg:w-7"
+                    />
                   </div>
                   <div className="user-comment-container flex flex-col">
                     <span
                       className="user-name-cont text-white"
                       style={fontWeight(700)}
                     >
-                      {user.username}
+                      {user.username ? user.username : "Unknown User"}
                     </span>
-                    <div className="comment-date-holder flex">
+                    <div className="comment-date-holder flex items-end">
                       <div
-                        className="user-comment text-sm text-white lg:text-base"
+                        className="user-comment w-[40vw] break-words text-sm text-white sm:w-[20rem] lg:text-base"
                         style={fontWeight(500)}
                       >
                         {user.comment}
                       </div>
                       <div
-                        className="comment-date mr-2 text-gray-400 lg:mr-0"
+                        className="comment-date mr-2 whitespace-nowrap text-gray-400 lg:mr-0"
                         style={fontWeight(500)}
                       >
                         {dateFormat.format(user.time)}
