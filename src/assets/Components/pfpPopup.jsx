@@ -44,14 +44,14 @@ export default function PfpPopup({
               Display name
             </label>
             <input
-              value={selectedName}
+              value={selectedName || ""}
               onChange={(e) => onNameChange(e.target.value)}
               placeholder="Enter your chat name"
               className="w-full rounded-2xl border border-white/10 bg-[#0f1226] p-3 text-white outline-none focus:border-cyan-400"
             />
           </div>
 
-          <div className="grid grid-cols-2 items-center gap-4 sm:grid-cols-4">
+          <div className="grid grid-cols-2 items-center gap-4 sm:grid-cols-3">
             {avatarOptions.map((avatarUrl, index) => {
               const isSelected = selectedAvatar === avatarUrl;
               return (

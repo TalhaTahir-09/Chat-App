@@ -100,7 +100,7 @@ function SignIn(authState) {
             <div className="w-full flex-shrink-0 p-6">
               <div className="signIn-text mb-2 lg:mb-12">
                 <h3 className="heading-1" style={fontWeight(500)}>
-                  Sign In
+                  Log In
                 </h3>
                 <p style={fontWeight(400)}>Hi👋 Sign up to talk to world!</p>
               </div>

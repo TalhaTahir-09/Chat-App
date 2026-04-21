@@ -3,6 +3,7 @@ import useOnlineStatus from "./useOnlineStatus.jsx";
 import PfpPopup from "./pfpPopup.jsx";
 import LoadingScreen from "./LoadingScreen.jsx";
 import { db } from "../firebase-config";
+import Members from "./Members.jsx";
 import {
   getDocs,
   collection,
@@ -13,44 +14,52 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { fontWeight } from "../index.js";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut,
+  updateProfile,
+} from "firebase/auth";
 import { auth } from "../firebase-config.js";
 
 export default function ChatRoom() {
-  // // State
+  // State
   const containerRef = useRef(null);
   const [commentList, setCommentList] = useState([]);
   const [username, setUsername] = useState("");
-  const [userImg, setUserImg] = useState("");
+  const [userImg, setUserImg] = useState(null);
   const [userId, setUserId] = useState("");
   const [showPfpPopup, setShowPfpPopup] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [isSaved, setIsSaved] = useState(false);
-
   const [inputComment, setInputComment] = useState("");
 
   useEffect(() => {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUserId(user.uid);
-        setUserImg(user.photoURL);
-        setUsername(user.displayName);
-      }
-      if (user.photoURL === null) {
-        console.log(user.photoURL);
-        setShowPfpPopup(true);
-        setIsSaved(false);
-        console.log("afafsa");
-      } else {
-        console.log("Pookie");
-        setShowPfpPopup(false);
-        setIsSaved(true);
-      }
-    });
-    setIsAuthLoading(false);
+    async function fetchData() {
+      onAuthStateChanged(auth, (user) => {
+        const userImg = user.email;
+        if (user) {
+          setUserId(user.uid);
+          setUserImg(user.photoURL);
+          setUsername(user.displayName);
+        }
+        const imgStorage = localStorage.getItem("avatar");
+        if (user.photoURL === null && imgStorage === null) {
+          console.log(user.photoURL);
+          setShowPfpPopup(true);
+          setIsSaved(false);
+          console.log("afafsa");
+        } else {
+          setShowPfpPopup(false);
+          setIsSaved(true);
+        }
+        setIsAuthLoading(false);
+      });
+    }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
     const commentListRef = collection(db, "comments");
     const q = query(commentListRef, orderBy("time"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -63,12 +72,15 @@ export default function ChatRoom() {
 
     return () => unsubscribe();
   }, []);
+
   const isOnline = useOnlineStatus();
 
   function handleSignOut() {
+    localStorage.clear();
     signOut(auth);
     window.location.replace("/");
   }
+
   const handleEnter = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -76,6 +88,7 @@ export default function ChatRoom() {
       setInputComment("");
     }
   };
+
   const handleSend = async () => {
     setInputComment("");
     try {
@@ -90,21 +103,25 @@ export default function ChatRoom() {
       console.error(err);
     }
   };
+
   // Date formater
   const dateFormat = new Intl.DateTimeFormat("en-us", {
     hour: "numeric",
     minute: "numeric",
   });
 
-  const handleSubmitProfile = () => {
+  function handleSubmitProfile(avatar, username) {
+    localStorage.setItem("username", username);
+    localStorage.setItem("avatar", avatar);
     setShowPfpPopup(false);
     setIsSaved(true);
-  };
+  }
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
   }, [commentList]);
+
   if (isAuthLoading) {
     return <LoadingScreen />;
   }
@@ -112,130 +129,140 @@ export default function ChatRoom() {
   if (isOnline) {
     return (
       <>
-        <div className="bg-chat h-full w-full px-6 pb-5 pt-5 lg:p-20 lg:py-10 2xl:px-60">
-          <div className="chat-input-container relative flex h-full w-full flex-col">
-            <div className="chat-header mb-4 flex flex-col gap-3 rounded-3xl border border-white/10 bg-[#111827] p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-3">
-                <div className="h-12 w-12 overflow-hidden rounded-full border border-white/20 bg-slate-900">
-                  <img
-                    src={
-                      userImg
-                        ? userImg
-                        : "https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg"
-                    }
-                    alt="Current avatar"
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                <div>
-                  <p className="text-base text-white" style={fontWeight(600)}>
-                    {username || "Guest"}
-                  </p>
-                </div>
-              </div>
-              <button
-                disabled={isSaved}
-                className="rounded-2xl bg-cyan-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-cyan-600 disabled:hidden"
-                id="change-avatar-btn"
-                style={fontWeight(500)}
-                onClick={() => setShowPfpPopup(true)}
-              >
-                Change avatar
-              </button>
+        <div className="min-h-screen bg-gray-900">
+          <div className="mx-auto flex h-screen max-w-7xl">
+            <div className="hidden w-80 border-r border-gray-700 bg-gray-800 lg:block">
+              <Members />
             </div>
-            <div
-              className="chat-messages-container flex flex-col gap-3 pb-16 sm:mb-24"
-              ref={containerRef}
-            >
-              {commentList.map((user) => {
-                return (
-                  <div
-                    key={user.time}
-                    className="chat-message-container flex items-center justify-center gap-2 p-2 sm:p-4 sm:pr-4 lg:gap-4"
-                  >
-                    <div className="user-img-cont ml-2 w-5 lg:ml-0 lg:w-7">
-                      <img
-                        src={
-                          user.userImg
-                            ? user.userImg
-                            : "https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg"
-                        }
-                        className="user-img w-5 lg:w-7"
-                      />
-                    </div>
-                    <div className="user-comment-container flex flex-col">
-                      <span
-                        className="user-name-cont text-white"
-                        style={fontWeight(700)}
-                      >
-                        {user.username ? user.username : "Unknown User"}
-                      </span>
-                      <div className="comment-date-holder flex items-end">
-                        <div
-                          className="user-comment w-[40vw] break-words text-sm text-white sm:w-[20rem] lg:text-base"
-                          style={fontWeight(500)}
-                        >
-                          {user.comment}
-                        </div>
-                        <div
-                          className="comment-date mr-2 whitespace-nowrap text-gray-400 lg:mr-0"
-                          style={fontWeight(500)}
-                        >
-                          {dateFormat.format(user.time)}
-                        </div>
-                      </div>
-                    </div>
+
+            <div className="flex flex-1 flex-col">
+              <div className="flex items-center justify-between border-b border-gray-700 bg-gray-800 px-4 py-3">
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <img
+                      src={
+                        userImg ||
+                        localStorage.getItem("avatar") ||
+                        "https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg"
+                      }
+                      alt="Current avatar"
+                      className="h-8 w-8 rounded-full border-2 border-gray-600 object-cover"
+                    />
+                    <div className="absolute -bottom-1 -right-1 h-3 w-3 rounded-full border-2 border-gray-900 bg-green-500"></div>
                   </div>
-                );
-              })}
-            </div>
-            <div className="input-container bg-chat absolute left-0 flex w-full flex-col items-center justify-center gap-2 pt-2 sm:flex-row lg:bottom-12 lg:gap-6">
-              <div className="relative w-full grow">
-                <input
-                  onChange={(e) => {
-                    setInputComment(e.target.value);
-                  }}
-                  value={inputComment}
-                  onKeyDown={handleEnter}
-                  type="text"
-                  className="Text-sender-input w-full rounded-2xl border-2 border-solid border-white px-4 text-base focus:border-2 focus:border-solid focus:border-purple-400 sm:p-4 sm:pl-12"
-                  placeholder="Send a message....."
-                  style={fontWeight(500)}
-                />
-                <div className="sender-container absolute right-0 top-2/4 flex -translate-x-2/4 -translate-y-2/4 items-center justify-center">
+                  <div>
+                    <h1 className="text-lg font-semibold text-white">
+                      {username || localStorage.getItem("username") || "Guest"}
+                    </h1>
+                    <p className="text-sm text-gray-400">Online</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
                   <button
-                    className="bx bxs-arrow-to-top input-sender"
-                    onClick={handleSend}
-                  ></button>
+                    onClick={() => setShowPfpPopup(true)}
+                    className={`rounded bg-gray-700 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-600 hover:text-white ${isSaved ? "hidden": ""}`}
+                  >
+                    Edit Profile
+                  </button>
+                  <button
+                    onClick={handleSignOut}
+                    className="rounded bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700"
+                  >
+                    Sign Out
+                  </button>
                 </div>
               </div>
-              <button
-                className="sign-in-btn chat-sign-in flex w-full items-center justify-center bg-cyan-700 text-white sm:w-1/5"
-                style={fontWeight(500)}
-                onClick={handleSignOut}
-              >
-                Sign Out
-              </button>
+
+              <div className="flex-1 overflow-hidden">
+                <div ref={containerRef} className="h-full overflow-y-auto p-4">
+                  <div className="space-y-4">
+                    {commentList.map((message) => (
+                      <div
+                        key={message.time}
+                        className="flex items-start gap-3"
+                      >
+                        {message.id !== userId && (
+                          <div className="flex min-w-40 max-w-xs items-center justify-center gap-4">
+                            <img
+                              src={
+                                message.userImg || localStorage.getItem("avatar") ||
+                                "https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg"
+                              }
+                              alt={message.username}
+                              className="h-8 w-8 rounded-full border border-gray-600 object-cover"
+                            />
+                            <div className="flex w-full max-w-xs flex-col gap-1 rounded-lg bg-gray-700 px-3 py-1">
+                              <p className="mt-1 text-white">
+                                {message.comment}
+                              </p>
+                              <p className="text-right text-xs text-gray-400">
+                                {dateFormat.format(message.time)}
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                        {message.id === userId && (
+                          <div className="ml-auto flex min-w-40 max-w-xs items-center justify-center gap-4">
+                            <div className="flex w-full max-w-xs flex-col gap-1 rounded-lg bg-gray-700 px-3 py-1">
+                              <p className="mt-1 text-left text-white">
+                                {message.comment}
+                              </p>
+                              <p className="text-right text-xs text-gray-400">
+                                {dateFormat.format(message.time)}
+                              </p>
+                            </div>
+                            <img
+                              src={
+                                message.userImg || localStorage.getItem("avatar") ||
+                                "https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg"
+                              }
+                              alt={message.username}
+                              className="h-8 w-8 rounded-full border border-gray-600 object-cover"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-t border-gray-700 bg-gray-800 p-4">
+                <div className="flex gap-3">
+                  <input
+                    type="text"
+                    value={inputComment}
+                    onChange={(e) => setInputComment(e.target.value)}
+                    onKeyDown={handleEnter}
+                    placeholder="Type a message..."
+                    className="flex-1 rounded border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none"
+                  />
+                  <button
+                    onClick={handleSend}
+                    disabled={!inputComment.trim()}
+                    className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-600"
+                  >
+                    Send
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+
         <PfpPopup
-          saved={isSaved}
           visible={showPfpPopup}
+          onClose={() => setShowPfpPopup(false)}
+          onSubmit={handleSubmitProfile}
           selectedAvatar={userImg}
           selectedName={username}
-          onSelectAvatar={(avatarUrl) => setUserImg(avatarUrl)}
-          onNameChange={(name) => setUsername(name)}
-          onSubmit={handleSubmitProfile}
+          onSelectAvatar={setUserImg}
+          onNameChange={setUsername}
+          saved={isSaved}
         />
-        <ToastContainer />
       </>
     );
-  } else {
-    return (
-      <div className="bg-chat items flex h-full w-full justify-center px-6 pb-5 pt-5 lg:p-20 lg:py-10 2xl:px-60">
-        <h1 className="text-2xl text-white">Reconnecting....</h1>
-      </div>
-    );
   }
+
+  return null;
 }

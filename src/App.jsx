@@ -22,8 +22,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Welcome  authState={authState}  />} />
-          <Route path="/chat-room" element={<ChatRoom auth={auth}/>} />
-          <Route path="/pfp" element={<ChatRoom />} />
+          <Route path="/chat-room" element={<ChatRoom />} />
 
         </Routes>
       </Router>
