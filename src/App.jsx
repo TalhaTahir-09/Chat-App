@@ -11,7 +11,7 @@ function App() {
   useEffect(() => {
     console.log("Ran")
     auth.onAuthStateChanged(function (user) {
-      if (user && window.location.href !== "http://localhost:5173/chat-room") {
+      if (user && window.location.href !== "https://chatapptalha.vercel.app/chat-room") {
         console.log("Ran");
         window.location.replace("/chat-room");
       }
